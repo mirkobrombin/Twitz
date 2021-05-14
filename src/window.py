@@ -47,10 +47,10 @@ class TwitzWindow(Handy.ApplicationWindow):
     settings = Gio.Settings.new("pm.mirko.Twitz")
 
     chat = chat.TwitzChat()
-    player = player.TwitzPlayer()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.player = player.TwitzPlayer(self)
 
         '''Prefer dark theme'''
         self.default_settings.set_property(
@@ -64,6 +64,7 @@ class TwitzWindow(Handy.ApplicationWindow):
         self.btn_play.connect("clicked", self.player.play)
         self.btn_pause.connect("clicked", self.player.stop)
         self.btn_preferences.connect('pressed', self.show_preferences)
+        self.combo_res.connect('changed', self.player.set_resolution)
 
         self.frame.add(self.player)
         self.box_player.pack_start(self.frame, True, True, 0)

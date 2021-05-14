@@ -17,10 +17,12 @@
 
 import ctypes
 import webbrowser
+import youtube_dl
 from gi.repository import Gtk, Gdk, Gio, GLib, Handy, WebKit2
 from OpenGL import GL, GLX
 from .globals import cookies_path, twitch_streamer_uri, twitch_chat_uri
 from mpv import MPV, MpvRenderContext, OpenGlCbGetProcAddrFn
+from pprint import pprint
 
 def get_process_address(_, name):
     address = GLX.glXGetProcAddress(name.decode("utf-8"))
@@ -34,30 +36,60 @@ class TwitzPlayer(Gtk.GLArea):
         "resolutions": []
     }
 
-    def __init__(self, **properties):
+    def __init__(self, window, **properties):
         super().__init__(**properties)
 
         self._proc_addr_wrapper = OpenGlCbGetProcAddrFn(get_process_address)
         self.ctx = None
         self.mpv = MPV()
+        self.window = window
 
         self.connect("realize", self.on_realize)
         self.connect("render", self.on_render)
         self.connect("unrealize", self.on_unrealize)
 
+    def set_resolution(self, widget):
+        res = widget.get_active_id()
+        self.play(res=res)
+
     def set_stream(self, streamer_name:str):
         self.stream = {
             "name": streamer_name,
             "url": twitch_streamer_uri % streamer_name,
-            "resolutions": []
+            "resolutions": {}
         }
+
+        with youtube_dl.YoutubeDL({}) as ydl:
+            meta = ydl.extract_info(self.stream["url"], download=False)
+            formats = meta.get('formats', [meta])
+
+            for f in formats:
+                f_name = f["format_id"].replace("_"," ").replace("source","")
+                self.stream["resolutions"][f_name] = f["url"]
+
+            self.stream["resolutions"] = sorted(
+                self.stream["resolutions"],
+                reverse=False
+            )
+            self.update_combo_res()
+
         self.play()
+
+    def update_combo_res(self):
+        self.window.combo_res.remove_all()
+        for r in self.stream["resolutions"]:
+            self.window.combo_res.append(r, r)
 
     def stop(self, widget=None, data=None):
         self.mpv.stop()
 
-    def play(self, widget=None, data=None):
-        self.mpv.play(self.stream["url"])
+    def play(self, widget=None, data=None, res=False):
+        url = self.stream["url"]
+
+        if res:
+            url = self.stream["resolutions"][res]
+
+        self.mpv.play(url)
 
     def on_realize(self, widget, data=None):
         self.make_current()
