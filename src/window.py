@@ -78,8 +78,9 @@ class TwitzWindow(Handy.ApplicationWindow):
 
     def on_search(self, widget):
         streamer_name = widget.get_text()
-        self.player.set_stream(streamer_name)
         self.chat.set_stream(streamer_name)
+        self.player.set_stream(streamer_name)
+        self.main_stack.set_visible_child_name("page_stream")
 
     def show_preferences(self, widget):
         p = preferences.TwitzPreferences(self)

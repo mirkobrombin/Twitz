@@ -67,18 +67,20 @@ class TwitzPlayer(Gtk.GLArea):
                 f_name = f["format_id"].replace("_"," ").replace("source","")
                 self.stream["resolutions"][f_name] = f["url"]
 
-            self.stream["resolutions"] = sorted(
-                self.stream["resolutions"],
-                reverse=False
-            )
             self.update_combo_res()
 
         self.play()
 
     def update_combo_res(self):
         self.window.combo_res.remove_all()
-        for r in self.stream["resolutions"]:
-            self.window.combo_res.append(r, r)
+        if len(self.stream["resolutions"]) > 0:
+            for r in self.stream["resolutions"]:
+                self.window.combo_res.append(r, r)
+
+            first = list(self.stream["resolutions"])[-1]
+            self.window.combo_res.handler_block_by_func(self.set_resolution)
+            self.window.combo_res.set_active_id(first)
+            self.window.combo_res.handler_unblock_by_func(self.set_resolution)
 
     def stop(self, widget=None, data=None):
         self.mpv.stop()
@@ -87,6 +89,7 @@ class TwitzPlayer(Gtk.GLArea):
         url = self.stream["url"]
 
         if res:
+            print(self.stream["resolutions"])
             url = self.stream["resolutions"][res]
 
         self.mpv.play(url)
