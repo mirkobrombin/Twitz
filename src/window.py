@@ -33,10 +33,12 @@ from .globals import twitch_streamer_uri
 class TwitzWindow(Handy.ApplicationWindow):
     __gtype_name__ = 'TwitzWindow'
 
+    main_stack = Gtk.Template.Child()
     btn_refresh = Gtk.Template.Child()
     btn_pause = Gtk.Template.Child()
     btn_play = Gtk.Template.Child()
     btn_preferences = Gtk.Template.Child()
+    btn_toggle_chat = Gtk.Template.Child()
     combo_res = Gtk.Template.Child()
     entry_search = Gtk.Template.Child()
     scroll_window = Gtk.Template.Child()
@@ -64,6 +66,7 @@ class TwitzWindow(Handy.ApplicationWindow):
         self.btn_play.connect("clicked", self.player.play)
         self.btn_pause.connect("clicked", self.player.stop)
         self.btn_preferences.connect('pressed', self.show_preferences)
+        self.btn_toggle_chat.connect('pressed', self.toggle_chat)
         self.combo_res.connect('changed', self.player.set_resolution)
 
         self.frame.add(self.player)
@@ -82,4 +85,7 @@ class TwitzWindow(Handy.ApplicationWindow):
         p = preferences.TwitzPreferences(self)
         p.present()
 
+    def toggle_chat(self, widget):
+        status = self.scroll_window.get_visible()
+        self.scroll_window.set_visible(not status)
 

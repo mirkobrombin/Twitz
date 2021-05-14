@@ -101,3 +101,4 @@ class TwitzChat():
     def on_change(self, web_view, load_event):
         scripts = Gio.resources_lookup_data("/pm/mirko/Twitz/scripts.js", 0)
         self.webview.run_javascript(str(scripts.get_data(), "utf-8"))
+

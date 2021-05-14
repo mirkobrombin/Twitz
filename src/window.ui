@@ -108,8 +108,8 @@
     <property name="can-focus">False</property>
     <property name="title" translatable="yes">Twitz</property>
     <property name="window-position">center</property>
-    <property name="default-width">1280</property>
-    <property name="default-height">720</property>
+    <property name="default-width">1527</property>
+    <property name="default-height">760</property>
     <property name="gravity">center</property>
     <child>
       <object class="GtkBox">
@@ -165,7 +165,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkStack">
+          <object class="GtkStack" id="main_stack">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <child>
@@ -203,7 +203,7 @@
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="receives-default">True</property>
-                                <property name="tooltip-text" translatable="yes">Refresh</property>
+                                <property name="tooltip-text" translatable="yes">Pause</property>
                                 <child>
                                   <object class="GtkImage">
                                     <property name="visible">True</property>
@@ -223,7 +223,7 @@
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
                                 <property name="receives-default">True</property>
-                                <property name="tooltip-text" translatable="yes">Refresh</property>
+                                <property name="tooltip-text" translatable="yes">Play</property>
                                 <child>
                                   <object class="GtkImage">
                                     <property name="visible">True</property>
@@ -242,6 +242,7 @@
                               <object class="GtkComboBoxText" id="combo_res">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
+                                <property name="tooltip-text" translatable="yes">Change resolution</property>
                                 <property name="active-id">720p</property>
                               </object>
                               <packing>
@@ -277,6 +278,7 @@
                                 <property name="can-focus">True</property>
                                 <property name="focus-on-click">False</property>
                                 <property name="receives-default">True</property>
+                                <property name="tooltip-text" translatable="yes">Open menu</property>
                                 <property name="popover">pop_menu</property>
                                 <child>
                                   <object class="GtkImage">
@@ -289,7 +291,28 @@
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
+                                <property name="pack-type">end</property>
                                 <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="btn_toggle_chat">
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">True</property>
+                                <property name="tooltip-text" translatable="yes">Toggle chat</property>
+                                <child>
+                                  <object class="GtkImage">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="icon-name">view-reveal-symbolic</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
                               </packing>
                             </child>
                             <style>
