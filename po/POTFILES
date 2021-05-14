@@ -1,0 +1,7 @@
+data/pm.mirko.Twitz.desktop.in
+data/pm.mirko.Twitz.appdata.xml.in
+data/pm.mirko.Twitz.gschema.xml
+src/window.ui
+src/main.py
+src/window.py
+

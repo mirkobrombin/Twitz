@@ -1,0 +1,15 @@
+.scroll_window,
+.webview {
+  background-color: #18181b;
+}
+
+.scroll_window,
+.webview,
+.draw,
+.play_area {
+  background-color: #000;
+}
+
+.player {
+  background-color: #252525;
+}
