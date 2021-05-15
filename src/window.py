@@ -23,6 +23,7 @@ from gi.repository import Gtk, Gdk, Gio, GLib, Handy, WebKit2
 from mpv import MPV, MpvRenderContext, OpenGlCbGetProcAddrFn
 from pathlib import Path
 from pprint import pprint
+from . import about
 from . import chat
 from . import player
 from . import login
@@ -45,6 +46,7 @@ class TwitzWindow(Handy.ApplicationWindow):
     btn_full_immersive = Gtk.Template.Child()
     btn_full_exit = Gtk.Template.Child()
     btn_login = Gtk.Template.Child()
+    btn_about = Gtk.Template.Child()
     combo_res = Gtk.Template.Child()
     entry_search = Gtk.Template.Child()
     scroll_window = Gtk.Template.Child()
@@ -76,6 +78,7 @@ class TwitzWindow(Handy.ApplicationWindow):
         self.btn_pause.connect("clicked", self.player.stop)
         self.btn_preferences.connect('pressed', self.show_preferences)
         self.btn_login.connect('pressed', self.show_login)
+        self.btn_about.connect('pressed', self.show_about)
         self.btn_toggle_chat.connect('pressed', self.toggle_chat)
         self.btn_full_chat.connect('pressed', self.set_fullscreen, "chat")
         self.btn_full_immersive.connect('pressed', self.set_fullscreen, "full")
@@ -106,6 +109,10 @@ class TwitzWindow(Handy.ApplicationWindow):
     def show_login(self, widget):
         l = login.TwitzLogin(self)
         l.present()
+
+    def show_about(self, widget):
+        a = about.TwitzAbout(self)
+        a.present()
 
     def _toggle_fullscreen(self):
         if self.is_fullscreen:

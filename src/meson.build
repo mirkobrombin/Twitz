@@ -27,6 +27,7 @@ configure_file(
 
 twitz_sources = [
   '__init__.py',
+  'about.py',
   'main.py',
   'window.py',
   'chat.py',
