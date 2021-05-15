@@ -34,6 +34,7 @@ class TwitzWindow(Handy.ApplicationWindow):
     __gtype_name__ = 'TwitzWindow'
 
     main_stack = Gtk.Template.Child()
+    headerbar = Gtk.Template.Child()
     btn_refresh = Gtk.Template.Child()
     btn_pause = Gtk.Template.Child()
     btn_play = Gtk.Template.Child()
@@ -100,9 +101,17 @@ class TwitzWindow(Handy.ApplicationWindow):
 
     def _toggle_fullscreen(self):
         if self.is_fullscreen:
-            self.unfullscreen()
+            self.__unfullscreen()
         else:
-            self.fullscreen()
+            self.__fullscreen()
+
+    def __fullscreen(self):
+        self.headerbar.set_visible(False)
+        self.fullscreen()
+
+    def __unfullscreen(self):
+        self.headerbar.set_visible(True)
+        self.unfullscreen()
 
     def set_fullscreen(self, widget=None, status=None):
         GLib.idle_add(self.pop_fullscreen.popdown)
@@ -114,13 +123,13 @@ class TwitzWindow(Handy.ApplicationWindow):
                 w.set_visible(True)
 
         if status is None:
-            self.unfullscreen()
+            self.__unfullscreen()
             self.toggle_chat(status=False)
         elif status == "full":
-            self.fullscreen()
+            self.__fullscreen()
             self.toggle_chat(status=True)
         elif status == "chat":
-            self.fullscreen()
+            self.__fullscreen()
             self.toggle_chat(status=False)
 
 
