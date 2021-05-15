@@ -28,12 +28,6 @@ class TwitzPreferences(Handy.PreferencesWindow):
         super().__init__(**kwargs)
         self.set_transient_for(window)
 
-        '''Init template'''
-        try:
-            self.init_template()
-        except TypeError:
-            self.init_template("")
-
         '''Common variables'''
         self.window = window
         self.settings = window.settings

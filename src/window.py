@@ -25,6 +25,7 @@ from pathlib import Path
 from pprint import pprint
 from . import chat
 from . import player
+from . import login
 from . import preferences
 from .globals import twitch_streamer_uri
 
@@ -43,6 +44,7 @@ class TwitzWindow(Handy.ApplicationWindow):
     btn_full_chat = Gtk.Template.Child()
     btn_full_immersive = Gtk.Template.Child()
     btn_full_exit = Gtk.Template.Child()
+    btn_login = Gtk.Template.Child()
     combo_res = Gtk.Template.Child()
     entry_search = Gtk.Template.Child()
     scroll_window = Gtk.Template.Child()
@@ -60,10 +62,10 @@ class TwitzWindow(Handy.ApplicationWindow):
         super().__init__(**kwargs)
         self.player = player.TwitzPlayer(self)
 
-        '''Prefer dark theme'''
+        '''Set theme'''
         self.default_settings.set_property(
             "gtk-application-prefer-dark-theme",
-            True
+            self.settings.get_boolean("dark-theme")
         )
 
         '''Signals'''
@@ -73,17 +75,18 @@ class TwitzWindow(Handy.ApplicationWindow):
         self.btn_play.connect("clicked", self.player.play)
         self.btn_pause.connect("clicked", self.player.stop)
         self.btn_preferences.connect('pressed', self.show_preferences)
+        self.btn_login.connect('pressed', self.show_login)
         self.btn_toggle_chat.connect('pressed', self.toggle_chat)
         self.btn_full_chat.connect('pressed', self.set_fullscreen, "chat")
         self.btn_full_immersive.connect('pressed', self.set_fullscreen, "full")
         self.btn_full_exit.connect('pressed', self.set_fullscreen, None)
         self.combo_res.connect('changed', self.player.set_resolution)
 
+        '''Show widgets'''
         self.frame.add(self.player)
         self.box_player.pack_start(self.frame, True, True, 0)
-
-        '''Show widgets'''
         self.scroll_window.add(self.chat.webview)
+        self.check_login()
         self.show_all()
 
     def on_search(self, widget):
@@ -93,11 +96,16 @@ class TwitzWindow(Handy.ApplicationWindow):
         self.main_stack.set_visible_child_name("page_stream")
 
     def on_win_state_event(self, widget, ev):
-        self.is_fullscreen = bool(ev.new_window_state & Gdk.WindowState.FULLSCREEN)
+        self.is_fullscreen = bool(
+            ev.new_window_state & Gdk.WindowState.FULLSCREEN)
 
     def show_preferences(self, widget):
         p = preferences.TwitzPreferences(self)
         p.present()
+
+    def show_login(self, widget):
+        l = login.TwitzLogin(self)
+        l.present()
 
     def _toggle_fullscreen(self):
         if self.is_fullscreen:
@@ -132,9 +140,14 @@ class TwitzWindow(Handy.ApplicationWindow):
             self.__fullscreen()
             self.toggle_chat(status=False)
 
-
     def toggle_chat(self, widget=None, status=None):
         if status is None:
             status = self.scroll_window.get_visible()
         self.scroll_window.set_visible(not status)
 
+    def check_login(self):
+        u = self.settings.get_string("username")
+        if u and u not in ["None", None]:
+            self.btn_login.handler_block_by_func(self.show_login)
+            self.btn_login.set_label(u)
+            self.chat.on_refresh()

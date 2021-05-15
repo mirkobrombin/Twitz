@@ -32,6 +32,7 @@ twitz_sources = [
   'chat.py',
   'globals.py',
   'player.py',
+  'login.py',
   'preferences.py',
 ]
 
