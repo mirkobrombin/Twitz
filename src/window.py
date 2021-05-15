@@ -15,19 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
-import webbrowser
-import time
-from streamlink import Streamlink
-from gi.repository import Gtk, Gdk, Gio, GLib, Handy, WebKit2
-from mpv import MPV, MpvRenderContext, OpenGlCbGetProcAddrFn
-from pathlib import Path
+from gi.repository import Gtk, Gdk, Gio, GLib, Handy
 from . import about
 from . import chat
 from . import player
 from . import login
 from . import preferences
-from .globals import twitch_streamer_uri
 
 
 @Gtk.Template(resource_path='/pm/mirko/Twitz/window.ui')

@@ -16,7 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import ctypes
-import webbrowser
 import youtube_dl
 from gi.repository import Gtk, Gdk, Gio, GLib, Handy, WebKit2
 from OpenGL import GL, GLX
