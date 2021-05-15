@@ -19,7 +19,6 @@
 - WebKit2
 
 ### Working on
-- Twitch Login
 - Preferences
 
 ### Build
