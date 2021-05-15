@@ -17,7 +17,6 @@
 
 from gi.repository import Gtk, GLib, Handy, WebKit2, Soup
 from .globals import cookies_path, twitch_login_uri
-from pprint import pprint
 
 @Gtk.Template(resource_path='/pm/mirko/Twitz/login.ui')
 class TwitzLogin(Handy.Window):

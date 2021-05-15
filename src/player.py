@@ -22,7 +22,6 @@ from gi.repository import Gtk, Gdk, Gio, GLib, Handy, WebKit2
 from OpenGL import GL, GLX
 from .globals import cookies_path, twitch_streamer_uri, twitch_chat_uri
 from mpv import MPV, MpvRenderContext, OpenGlCbGetProcAddrFn
-from pprint import pprint
 
 def get_process_address(_, name):
     address = GLX.glXGetProcAddress(name.decode("utf-8"))

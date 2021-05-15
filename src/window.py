@@ -22,7 +22,6 @@ from streamlink import Streamlink
 from gi.repository import Gtk, Gdk, Gio, GLib, Handy, WebKit2
 from mpv import MPV, MpvRenderContext, OpenGlCbGetProcAddrFn
 from pathlib import Path
-from pprint import pprint
 from . import about
 from . import chat
 from . import player
