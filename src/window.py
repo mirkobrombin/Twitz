@@ -19,7 +19,7 @@ import os
 import webbrowser
 import time
 from streamlink import Streamlink
-from gi.repository import Gtk, Gdk, Gio, Handy, WebKit2
+from gi.repository import Gtk, Gdk, Gio, GLib, Handy, WebKit2
 from mpv import MPV, MpvRenderContext, OpenGlCbGetProcAddrFn
 from pathlib import Path
 from pprint import pprint
@@ -39,16 +39,21 @@ class TwitzWindow(Handy.ApplicationWindow):
     btn_play = Gtk.Template.Child()
     btn_preferences = Gtk.Template.Child()
     btn_toggle_chat = Gtk.Template.Child()
+    btn_full_chat = Gtk.Template.Child()
+    btn_full_immersive = Gtk.Template.Child()
+    btn_full_exit = Gtk.Template.Child()
     combo_res = Gtk.Template.Child()
     entry_search = Gtk.Template.Child()
     scroll_window = Gtk.Template.Child()
+    sep_full_exit = Gtk.Template.Child()
     box_player = Gtk.Template.Child()
+    pop_fullscreen = Gtk.Template.Child()
     frame = Gtk.Frame()
+
+    chat = chat.TwitzChat()
 
     default_settings = Gtk.Settings.get_default()
     settings = Gio.Settings.new("pm.mirko.Twitz")
-
-    chat = chat.TwitzChat()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -61,12 +66,16 @@ class TwitzWindow(Handy.ApplicationWindow):
         )
 
         '''Signals'''
+        self.connect("window-state-event", self.on_win_state_event)
         self.entry_search.connect('activate', self.on_search)
         self.btn_refresh.connect('pressed', self.chat.on_refresh)
         self.btn_play.connect("clicked", self.player.play)
         self.btn_pause.connect("clicked", self.player.stop)
         self.btn_preferences.connect('pressed', self.show_preferences)
         self.btn_toggle_chat.connect('pressed', self.toggle_chat)
+        self.btn_full_chat.connect('pressed', self.set_fullscreen, "chat")
+        self.btn_full_immersive.connect('pressed', self.set_fullscreen, "full")
+        self.btn_full_exit.connect('pressed', self.set_fullscreen, None)
         self.combo_res.connect('changed', self.player.set_resolution)
 
         self.frame.add(self.player)
@@ -82,11 +91,41 @@ class TwitzWindow(Handy.ApplicationWindow):
         self.player.set_stream(streamer_name)
         self.main_stack.set_visible_child_name("page_stream")
 
+    def on_win_state_event(self, widget, ev):
+        self.is_fullscreen = bool(ev.new_window_state & Gdk.WindowState.FULLSCREEN)
+
     def show_preferences(self, widget):
         p = preferences.TwitzPreferences(self)
         p.present()
 
-    def toggle_chat(self, widget):
-        status = self.scroll_window.get_visible()
+    def _toggle_fullscreen(self):
+        if self.is_fullscreen:
+            self.unfullscreen()
+        else:
+            self.fullscreen()
+
+    def set_fullscreen(self, widget=None, status=None):
+        GLib.idle_add(self.pop_fullscreen.popdown)
+
+        for w in [self.sep_full_exit, self.btn_full_exit]:
+            if status is None:
+                w.set_visible(False)
+            else:
+                w.set_visible(True)
+
+        if status is None:
+            self.unfullscreen()
+            self.toggle_chat(status=False)
+        elif status == "full":
+            self.fullscreen()
+            self.toggle_chat(status=True)
+        elif status == "chat":
+            self.fullscreen()
+            self.toggle_chat(status=False)
+
+
+    def toggle_chat(self, widget=None, status=None):
+        if status is None:
+            status = self.scroll_window.get_visible()
         self.scroll_window.set_visible(not status)
 

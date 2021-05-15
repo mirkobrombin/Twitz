@@ -70,11 +70,16 @@ class Application(Gtk.Application):
         '''Refresh [CTRL+R]'''
         self.win.on_refresh()
 
+    def fullscreen(self, action, param):
+        '''Fullscreen [F11]'''
+        self.win._toggle_fullscreen()
+
     def set_actions(self):
         '''Register window actions'''
         action_entries = [
             ("quit", self.quit, ("app.quit", ["<Ctrl>Q"])),
             ("help", self.help, ("app.help", ["F1"])),
+            ("fullscreen", self.fullscreen, ("app.fullscreen", ["F11"])),
             ("refresh", self.refresh, ("app.refresh", ["<Ctrl>R"]))
         ]
 
