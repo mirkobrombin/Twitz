@@ -45,7 +45,7 @@ class TwitzLogin(Handy.Window):
 
         '''Signals'''
         self.btn_cancel.connect('pressed', self.close)
-        self.cookies.connect("changed", self.cookies_change)
+        self.webview.connect("load-changed", self.on_change)
 
         '''Cookies'''
         self.cookies.set_persistent_storage(
@@ -59,11 +59,12 @@ class TwitzLogin(Handy.Window):
     def close(self, widget=None):
         self.destroy()
 
-    def cookies_change(self, data):
+    def on_change(self, web_view, load_event):
         cookies = self.cookiejar.all_cookies()
         for c in cookies:
-            if "twitch.tv" in c.get_domain().lower() and c.name == "login":
-                self.settings.set_string("username", c.value)
-                self.window.check_login()
-                self.close()
+            if "twitch.tv" in c.get_domain().lower():
+                if c.name in ["login", "name"]:
+                    self.settings.set_string("username", c.value)
+                    self.window.check_login()
+                    self.close()
 
