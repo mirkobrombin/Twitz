@@ -42,7 +42,7 @@ class TwitzContentManager(WebKit2.UserContentManager):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        '''CSS tricks'''
+        '''CSS tricks
         style = Gio.resources_lookup_data("/pm/mirko/Twitz/inject.css", 0)
         self.add_style_sheet(
             WebKit2.UserStyleSheet(
@@ -51,7 +51,7 @@ class TwitzContentManager(WebKit2.UserContentManager):
                 WebKit2.UserStyleLevel.USER,
                 None, None
             )
-        )
+        )'''
 
 
 class TwitzChat():
@@ -70,9 +70,6 @@ class TwitzChat():
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-
-        '''Signals'''
-        self.webview.connect('load-changed', self.on_change)
 
         '''Webview'''
         self.webview.set_background_color(Gdk.RGBA(0.05, 0.05, 0.05, 1.0))
@@ -98,7 +95,4 @@ class TwitzChat():
     def on_refresh(self, widget=None):
         self.webview.reload()
 
-    def on_change(self, web_view, load_event):
-        scripts = Gio.resources_lookup_data("/pm/mirko/Twitz/scripts.js", 0)
-        self.webview.run_javascript(str(scripts.get_data(), "utf-8"))
 
