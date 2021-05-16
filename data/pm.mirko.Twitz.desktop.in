@@ -4,5 +4,5 @@ Exec=twitz
 Icon=pm.mirko.Twitz
 Terminal=false
 Type=Application
-Categories=GTK;Music;Sound;Video;
+Categories=GTK;AudioVideo;
 StartupNotify=true
