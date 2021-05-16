@@ -1,7 +1,7 @@
-name: Build release packages
+name: Build unstable packages
 on:
-  release:
-    types: [published]
+  push:
+    branches: [ master ]
   workflow_dispatch:
 jobs:
   build-packages:
@@ -19,16 +19,19 @@ jobs:
       # --------------------------------------
       - name: Build .deb package
         run: dpkg-buildpackage
-      
-      # Release packages
-      # --------------------------------------        
+
+      # Rename and release packages
+      # --------------------------------------
+      - name: Rename packages
+        run: |
+          mv ../pm.mirko.twitz*.deb pm.mirko.twitz-unstable.deb
+        
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           draft: false
           prerelease: false
-          automatic_release_tag: ${{ steps.get_version.outputs.VERSION }}
-          title: ${{ steps.get_version.outputs.VERSION }}
+          automatic_release_tag: unstable
+          title: Unstable build
           files: |
-            Bottles-*-x86_64.AppImage*
-            ../pm.mirko.Twitz*.deb
+            pm.mirko.twitz-unstable.deb
