@@ -1,5 +1,5 @@
 Source: pm.mirko.twitz
-Section: video
+Section: AudioVideo
 Priority: optional
 Maintainer: Mirko Brombin <send@mirko.pm>
 Build-Depends: debhelper,
