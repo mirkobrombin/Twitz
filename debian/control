@@ -23,6 +23,7 @@ Depends: ${python3:Depends},
          libglib2.0-bin,
          ibus-gtk3,
          mpv,
+         youtube-dl,
          libmpv1
 Description: Twitz
  An unofficial and unpretentious Twitch client for Linux
