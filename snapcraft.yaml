@@ -43,6 +43,7 @@ parts:
       - libnotify4
       - libgstreamer1.0-0
       - mpv
+      - youtube-dl
       - gstreamer1.0-plugins-base
       - gstreamer1.0-plugins-good
       - gstreamer1.0-libav
@@ -50,12 +51,14 @@ parts:
       - gstreamer1.0-pulseaudio
     organize:
       snap/twitz/current/usr: usr
-  
-  python-packages:
+
+  youtube-dl:
+    source: https://github.com/ytdl-org/youtube-dl.git
     plugin: python
-    python-packages:
-      - python-mpv
-      - youtube_dl
+
+  python-mpv:
+    source: https://github.com/jaseg/python-mpv.git
+    plugin: python
 
 apps:
   twitz:
