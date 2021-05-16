@@ -51,10 +51,11 @@ parts:
     organize:
       snap/twitz/current/usr: usr
   
-  mpv:
+  python-packages:
     plugin: python
     python-packages:
       - python-mpv
+      - youtube_dl
 
 apps:
   twitz:
