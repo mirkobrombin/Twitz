@@ -12,14 +12,22 @@
 
 ## Installation
 
+### Ubuntu 20.04+
+**.deb** available from the [Releases](https://github.com/mirkobrombin/Twitz/releases).
+
+<!--
 ### Snap
 [![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/twitz)
+-->
 
 ### Build dependencies
 - meson
 - ninja
 - libhandy
 - WebKit2
+- youtube-dl
+- python3-mpv
+- python3-opengl
 
 ### Working on
 - Preferences
