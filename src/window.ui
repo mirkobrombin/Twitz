@@ -334,8 +334,7 @@
                                 <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="label" translatable="yes">Live description</property>
-                                <property name="wrap">True</property>
-                                <property name="wrap-mode">word-char</property>
+                                <property name="ellipsize">end</property>
                                 <attributes>
                                   <attribute name="font-desc" value="Cantarell Bold 14"/>
                                 </attributes>
@@ -352,8 +351,7 @@
                                 <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="label" translatable="yes">Live streamer</property>
-                                <property name="wrap">True</property>
-                                <property name="wrap-mode">word-char</property>
+                                <property name="ellipsize">end</property>
                                 <attributes>
                                   <attribute name="font-desc" value="Cantarell 10"/>
                                 </attributes>
@@ -391,7 +389,7 @@
                                   <object class="GtkImage">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
-                                    <property name="icon-name">view-fullscreen</property>
+                                    <property name="icon-name">view-more-symbolic</property>
                                   </object>
                                 </child>
                               </object>
