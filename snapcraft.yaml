@@ -15,50 +15,82 @@ architectures:
 
 parts:
 
+  desktop-gtk3:
+    build-packages:
+      - build-essential
+      - libgtk-3-dev
+    make-parameters:
+      - FLAVOR=gtk3
+    plugin: make
+    source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
+    source-subdir: gtk
+    stage-packages:
+      - libxkbcommon0
+      - ttf-ubuntu-font-family
+      - dmz-cursor-theme
+      - light-themes
+      - adwaita-icon-theme
+      - gnome-themes-standard
+      - shared-mime-info
+      - libgtk-3-0
+      - libgdk-pixbuf2.0-0
+      - libglib2.0-bin
+      - libgtk-3-bin
+      - unity-gtk3-module
+      - libappindicator3-1
+      - locales-all
+      - xdg-user-dirs
+      - ibus-gtk3
+      - libibus-1.0-5
+      - fcitx-frontend-gtk3
+
   twitz:
-    plugin: meson
-    meson-parameters: [ --prefix=/usr ]
-    source: https://github.com/mirkobrombin/Twitz.git
-    override-pull: |
-      snapcraftctl pull
-      sed -i -e 's|@PYTHON@|/usr/bin/python3|g' src/twitz.in
-      sed -i.bak -e 's|Icon=pm.mirko.Twitz|Icon=/usr/share/icons/hicolor/scalable/apps/pm.mirko.Twitz.svg|g' data/pm.mirko.Twitz.desktop.in
+    plugin: dump
+    source: https://github.com/mirkobrombin/Twitz/releases/download/unstable/pm.mirko.twitz-unstable.deb
     build-packages:
       - python3
+      - python3-pip
       - python3-distutils
+      - python3-six
+      - python3-setuptools
       - gettext
       - libglib2.0-dev
       - appstream-util
       - desktop-file-utils
       - gsettings-desktop-schemas-dev
       - python3-pytoml
-      - libnotify-dev
       - libgtk-3-dev
+      - libmpv-dev
+      - libgirepository1.0-dev
+      - gobject-introspection
     stage-packages:
+      - libhandy-0.0-0
+      - python3
       - python3-gi
-      - python3-opengl
       - python3-gi-cairo
+      - python-gi-dev
       - gir1.2-gtk-3.0
+      - gir1.2-glib-2.0
+      - gir1.2-gdl-3
       - gir1.2-webkit2-4.0
-      - libnotify4
       - libgstreamer1.0-0
+      - libcairo-gobject2
+      - libcairo2
+      - libfontconfig1
+      - libgirepository-1.0-1
+      - libxrender1
       - mpv
-      - youtube-dl
-      - gstreamer1.0-plugins-base
-      - gstreamer1.0-plugins-good
-      - gstreamer1.0-libav
-      - gstreamer1.0-alsa
-      - gstreamer1.0-pulseaudio
+      - libmpv1
+      - libwbclient0
     organize:
       snap/twitz/current/usr: usr
 
-  youtube-dl:
-    source: https://github.com/ytdl-org/youtube-dl.git
+  python-packages:
     plugin: python
+    python-packages: [wheel, python-mpv, youtube_dl, pyopengl, PyGObject]
+    stage:
+      - lib/*
 
-  python-mpv:
-    source: https://github.com/jaseg/python-mpv.git
-    plugin: python
 
 apps:
   twitz:
@@ -80,6 +112,16 @@ apps:
       - dbus
     slots:
       - dbus-twitz
+    environment:
+      LD_LIBRARY_PATH: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio:$LD_LIBRARY_PATH"
+      DISABLE_WAYLAND: 1
+      XDG_CURRENT_DESKTOP: Unity
+      TMPDIR: $XDG_RUNTIME_DIR
+      XDG_DATA_HOME: $SNAP_USER_COMMON
+      HOME: $SNAP_USER_COMMON
+      GSETTINGS_SCHEMA_DIR: $SNAP/usr/share/glib-2.0/schemas
+      PYTHONPATH: $SNAP/usr/lib/python3/dist-packages
+      GI_TYPELIB_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/girepository-1.0
 
 slots:
   dbus-twitz:

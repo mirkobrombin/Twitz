@@ -45,6 +45,8 @@ class TwitzWindow(Handy.ApplicationWindow):
     sep_full_exit = Gtk.Template.Child()
     box_player = Gtk.Template.Child()
     pop_fullscreen = Gtk.Template.Child()
+    label_description = Gtk.Template.Child()
+    label_streamer = Gtk.Template.Child()
     frame = Gtk.Frame()
 
     chat = chat.TwitzChat()
@@ -54,6 +56,8 @@ class TwitzWindow(Handy.ApplicationWindow):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        Handy.init()
+
         self.player = player.TwitzPlayer(self)
 
         '''Set theme'''
@@ -150,3 +154,7 @@ class TwitzWindow(Handy.ApplicationWindow):
             self.btn_login.handler_block_by_func(self.show_login)
             self.btn_login.set_label(u)
             self.chat.on_refresh()
+
+    def set_live_info(self, description, streamer):
+        self.label_description.set_text(description)
+        self.label_streamer.set_text(streamer)

@@ -57,17 +57,24 @@ class TwitzPlayer(Gtk.GLArea):
             "resolutions": {}
         }
 
-        with youtube_dl.YoutubeDL({}) as ydl:
-            meta = ydl.extract_info(self.stream["url"], download=False)
-            formats = meta.get('formats', [meta])
+        try:
+            with youtube_dl.YoutubeDL({}) as ydl:
+                meta = ydl.extract_info(self.stream["url"], download=False)
+                formats = meta.get('formats', [meta])
 
-            for f in formats:
-                f_name = f["format_id"].replace("_"," ").replace("source","")
-                self.stream["resolutions"][f_name] = f["url"]
+                for f in formats:
+                    f_name = f["format_id"].replace("_"," ").replace("source","")
+                    self.stream["resolutions"][f_name] = f["url"]
 
-            self.update_combo_res()
+                self.window.set_live_info(
+                    meta["description"],
+                    meta["display_id"]
+                )
+                self.update_combo_res()
 
-        self.play()
+            self.play()
+        except youtube_dl.utils.DownloadError:
+            print("Streamer offline or not found.")
 
     def update_combo_res(self):
         self.window.combo_res.remove_all()
