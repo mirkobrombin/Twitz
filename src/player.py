@@ -73,8 +73,12 @@ class TwitzPlayer(Gtk.GLArea):
                 self.update_combo_res()
 
             self.play()
-        except youtube_dl.utils.DownloadError:
-            print("Streamer offline or not found.")
+        except youtube_dl.utils.DownloadError as e:
+            self.window.set_live_info(
+                "OFFLINE",
+                "The streamer you are looking for is currently offline"
+            )
+
 
     def update_combo_res(self):
         self.window.combo_res.remove_all()
