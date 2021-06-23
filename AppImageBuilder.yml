@@ -74,7 +74,7 @@ AppDir:
     - libselinux1
     - python3-gi
     - python3-gi-cairo
-    - python3-youtubedl
+    - youtube-dl
     - python3-opengl
     - python3-mpv
     - gir1.2-gtk-3.0
