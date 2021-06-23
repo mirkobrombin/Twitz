@@ -1,5 +1,8 @@
-pm.mirko.twitz (1.0.0) precise; urgency=low
+pm.mirko.twitz (1.1.0) precise; urgency=low
 
-  * First release
+  * Display a notice if streamer is offline
+  * Show live informations
+  * Change stream quality
+  * Full screen chat and immersive mode
 
- -- Mirko Brombin <send@mirko.pm>  Sat, 16 May 2021 18:54:00 +0000
+ -- Mirko Brombin <send@mirko.pm>  Sat, 23 Jun 2021 14:58:00 +0000
