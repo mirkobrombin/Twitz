@@ -1,18 +1,14 @@
 version: 1
 script:
   # Remove any previous build
-  - rm -rf AppDir | true
-  - rm -rf build  | true
+  - rm -rf AppDir | true && rm -rf build  | true
+  # Fix python interpreter
+  - sed -i -e 's|@PYTHON@|/usr/bin/python3|g' src/twitz.in
   # Building with meson and ninja
-  - mkdir build
-  - meson build --prefix=/usr/bin/
-  - cd build
-  - ninja
-  - ninja twitz-pot
-  - ninja twitz-update-po
-  - cd ..
+  - mkdir build && meson build --prefix=/usr/bin/
+  - cd build && ninja && ninja twitz-pot && ninja twitz-update-po
   # Preparing directories
-  - mkdir -p AppDir/usr AppDir/usr/local/share/twitz AppDir/usr/bin AppDir/usr/share/glib-2.0/schemas AppDir/usr/share/applications AppDir/usr/share/metainfo AppDir/usr/share/icons
+  - cd .. && mkdir -p AppDir/usr AppDir/usr/local/share/twitz AppDir/usr/bin AppDir/usr/share/glib-2.0/schemas AppDir/usr/share/applications AppDir/usr/share/metainfo AppDir/usr/share/icons
   # Compiling and installing glib-resources
   - glib-compile-resources --sourcedir=src/ src/twitz.gresource.xml --target=AppDir/usr/local/share/twitz/twitz.gresource
   # Copying twitz binary
@@ -48,15 +44,14 @@ AppDir:
     name: Twitz
     icon: pm.mirko.Twitz
     version: 1.1.0
-    # Set the python executable as entry point
-    exec: usr/bin/python3.9
-    # Set the application main script path as argument. Use '$@' to forward CLI parameters
+    exec: usr/bin/python3
     exec_args: "$APPDIR/usr/bin/twitz $@"
 
   apt:
     arch: amd64
     sources:
-      - sourceline: 'deb http://archive.ubuntu.com/ubuntu/ hirsute main restricted universe multiverse'
+      - sourceline: 'deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ hirsute main restricted universe multiverse'
+      - sourceline: 'deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ hirsute-updates main restricted universe multiverse'
         key_url: 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x871920D1991BC93C'
 
     include:
@@ -72,6 +67,8 @@ AppDir:
     - libpython3.9-stdlib
     - librsvg2-common
     - libselinux1
+    - libwebkit2gtk-4.0
+    - webkit2gtk-driver
     - python3-gi
     - python3-gi-cairo
     - youtube-dl
@@ -110,14 +107,13 @@ AppDir:
       - AppDir/usr/share/doc/*/TODO.*
 
   runtime:
+    path_mappings:
+      - /usr/lib/x86_64-linux-gnu/webkit2gtk-4.0:$APPDIR/usr/lib/x86_64-linux-gnu/webkit2gtk-4.0
     env:
-      # Set python home
+      LD_LIBRARY_PATH: '$(APPDIR)/usr/lib/x86_64-linux-gnu/webkit2gtk-4.0:$(LD_LIBRARY_PATH)'
+      PYTHONHOME: '${APPDIR}/usr'
       PYTHONPATH: '${APPDIR}/usr/lib/python3/dist-packages'
-      # SSL CERTIFICATE_VERIFY_FAILED python3.8 -m pip install --ignore-installed --prefix=/usr --root=$APPDIR install --upgrade certifi
-      #SSL_CERT_DIR: "/etc/ssl/certs:/etc/pki/ca-trust/extracted/pem:/etc/pki/ca-trust/extracted/openssl:/etc/ssl:/etc/pki/tls:/etc/pki:/etc/pki/ca-trust:/usr/local/share/certs:/usr/share/pki/ca-trust-source:/etc/openssl/certs:/var/ssl/certs"
       SSL_CERT_FILE: "$APPDIR/usr/lib/python3/dist-packages/certifi/cacert.pem"
-      # if you want to use Adwaita just uncomment bellow
-      # GTK_THEME: Adwaita
 
   test:
     fedora:
