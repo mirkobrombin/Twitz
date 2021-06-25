@@ -2,7 +2,7 @@
   <img src="https://raw.githubusercontent.com/mirkobrombin/Twitz/master/data/pm.mirko.Twitz.svg" width="64">
   <h1 align="center">Twitz</h1>
   <p align="center">A Twitch client for Linux (unpretentious)</p>
-  <p align="center">Twitz is software under development and may have problems. I ask you to remain calm and report them in the best possible way by opening an issue. Thanks for your attention.</p>
+  <p align="center"><b>Twitz is under development</b> and may have problems. I ask you to remain calm and report them in the best possible way by opening an issue. Thanks for your attention.</p>
 </div>
 
 <br />
