@@ -5,6 +5,23 @@
   <p align="center"><b>Twitz is under development</b> and you may encounter bugs using it. I ask you to remain calm and report them in the best possible way by opening an issue. Thanks for your attention.</p>
 </div>
 
+<br/>
+
+<div align="center">
+  <a href="https://www.codefactor.io/repository/github/mirkobrombin/twitz">
+    <img src="https://www.codefactor.io/repository/github/mirkobrombin/twitz/badge" alt="CodeFactor" />
+  </a>
+  <a href="https://github.com/mirkobrombin/Twitz/blob/master/LICENSE">
+    <img src="https://img.shields.io/badge/License-GPL--3.0-blue.svg">
+  </a>
+  <a href="https://github.com/mirkobrombin/Twitz/actions">
+    <img src="https://github.com/mirkobrombin/Amusiz/workflows/Build%20release%20packages/badge.svg">
+  </a>
+  <a href="https://aur.archlinux.org/packages/twitz/">
+    <img alt="AUR version" src="https://img.shields.io/aur/version/twitz">
+  </a>
+</div>
+
 <br />
 
 <div align="center">
