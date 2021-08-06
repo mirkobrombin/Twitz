@@ -3,6 +3,21 @@
 	<id>pm.mirko.Twitz.desktop</id>
 	<metadata_license>CC0-1.0</metadata_license>
 	<project_license>GPL-3.0-or-later</project_license>
+	<url type="homepage">https://github.com/mirkobrombin/Twitz</url>
+	<releases>
+		<release version="1.1.0" date="2021-06-25"/>
+	</releases>
+	<summary>A unpretentious Twitch client for Linux</summary>
 	<description>
+		<p>A desktop application to watch Twitch streams.</p>
 	</description>
+	<screenshots>
+		<screenshot type="default">
+			<image>https://raw.githubusercontent.com/mirkobrombin/Twitz/main/data/screenshot.png</image>
+		</screenshot>
+	</screenshots>
+	<content_rating type="oars-1.1">
+		<content_attribute id="social-chat">intense</content_attribute>
+		<content_attribute id="social-audio">intense</content_attribute>
+	</content_rating>
 </component>
