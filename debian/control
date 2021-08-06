@@ -1,10 +1,12 @@
 Source: pm.mirko.twitz
-Section: AudioVideo
+Section: video
 Priority: optional
 Maintainer: Mirko Brombin <send@mirko.pm>
-Build-Depends: debhelper,
+Build-Depends: debhelper-compat (= 13),
 	       python3,
                meson
+Standards-Version: 4.5.0
+Homepage: https://github.com/mirkobrombin/Twitz
 
 Package: pm.mirko.twitz
 Architecture: any
