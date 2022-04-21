@@ -1,0 +1,120 @@
+id: pm.mirko.twitz
+sdk: org.gnome.Sdk
+runtime: org.gnome.Platform
+runtime-version: "42"
+command: twitz
+
+finish-args:
+  - --share=ipc
+  - --share=network
+  - --socket=x11
+  - --socket=wayland
+  - --socket=pulseaudio
+  - --device=dri
+  - --own-name=pm.mirko.Twitz.*
+
+inherit-extensions:
+  - org.freedesktop.Platform.GL32
+  - org.freedesktop.Platform.ffmpeg-full
+  - org.freedesktop.Platform.ffmpeg_full.i386
+
+add-extensions:
+  org.freedesktop.Platform.ffmpeg-full:
+    directory: lib/ffmpeg
+    add-ld-path: "."
+    version: "21.08"
+    autodelete: false
+
+modules:
+  # Python modules
+  # ----------------------------------------------------------------------------
+  - name: python-mpv
+    buildsystem: simple
+    build-commands:
+      - python3 setup.py install --prefix=/app --root=/
+    sources:
+      - type: archive
+        url: https://github.com/jaseg/python-mpv/archive/refs/tags/v0.5.2.tar.gz
+        sha256: 3eacaecef995de7c9bbb80fe30223ab4ca427128384610fa2d87214961085fdb
+
+  - name: python-opengl
+    buildsystem: simple
+    build-commands:
+      - python3 setup.py install --prefix=/app --root=/
+    sources:
+      - type: archive
+        url: https://files.pythonhosted.org/packages/5b/01/f8fd986bc7f456f1a925ee0239f0391838ade92cdb6e5b674ffb8b86cfd6/PyOpenGL-3.1.6.tar.gz
+        sha256: 8ea6c8773927eda7405bffc6f5bb93be81569a7b05c8cac50cd94e969dce5e27
+
+  - name: python-numpy
+    buildsystem: simple
+    build-commands:
+      - python3 setup.py install --prefix=/app --root=/
+    sources:
+      - type: archive
+        url: https://github.com/numpy/numpy/releases/download/v1.21.6/numpy-1.21.6.tar.gz
+        sha256: d4efc6491a1cdc00f9eca9bf2c1aa13671776f6941c7321ddf75b45c862f0c2c
+
+  - name: youtube-dl
+    buildsystem: simple
+    build-commands:
+      - python3 setup.py install --prefix=/app --root=/
+    sources:
+      - type: archive
+        url: https://github.com/ytdl-org/youtube-dl/releases/download/2021.05.16/youtube-dl-2021.05.16.tar.gz
+        sha256: d4012a5ca8d77f8ee30a21532fd1042ed287c0784a5a76fcb74cc33ef76f1afd
+  
+  - name: libmpv
+    cleanup:
+      - /include
+      - /lib/pkgconfig
+    buildsystem: simple
+    build-commands:
+      - >-
+        python3 waf configure --prefix=${FLATPAK_DEST} --enable-libmpv-shared
+        --disable-cplayer --disable-alsa --disable-manpage-build
+        --disable-debug-build
+      - python3 waf build
+      - python3 waf install
+    sources:
+      - type: archive
+        url: https://github.com/mpv-player/mpv/archive/refs/tags/v0.34.1.tar.gz
+        sha256: 32ded8c13b6398310fa27767378193dc1db6d78b006b70dbcbd3123a1445e746
+      - type: file
+        url: https://waf.io/waf-2.0.22
+        sha256: 0a09ad26a2cfc69fa26ab871cb558165b60374b5a653ff556a0c6aca63a00df1
+        dest-filename: waf
+    modules:
+      - name: libass
+        cleanup:
+          - /include
+          - /lib/*.la
+          - /lib/pkgconfig
+        config-opts:
+          - '--disable-static'
+        sources:
+          - type: archive
+            url: >-
+              https://github.com/libass/libass/releases/download/0.15.0/libass-0.15.0.tar.xz
+            sha256: 9f09230c9a0aa68ef7aa6a9e2ab709ca957020f842e52c5b2e52b801a7d9e833
+        modules:
+          - name: fribidi
+            cleanup:
+              - /bin
+              - /include
+              - /lib/pkgconfig
+              - /lib/*.la
+              - /share/man
+            sources:
+              - type: archive
+                url: >-
+                  https://github.com/fribidi/fribidi/releases/download/v1.0.10/fribidi-1.0.10.tar.xz
+                sha256: >-
+                  7f1c687c7831499bcacae5e8675945a39bacbad16ecaa945e9454a32df653c01
+
+  - name: twitz
+    builddir: true
+    buildsystem: meson
+    sources:
+      - type: dir
+        path: .
