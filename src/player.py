@@ -20,11 +20,18 @@ import youtube_dl
 from gi.repository import Gtk, Gdk, Gio, GLib, Handy, WebKit2
 from OpenGL import GL, GLX
 from .globals import cookies_path, twitch_streamer_uri, twitch_chat_uri
-from mpv import MPV, MpvRenderContext, OpenGlCbGetProcAddrFn
+from mpv import MPV, MpvRenderContext
+
+try:
+    from mpv import OpenGlCbGetProcAddrFn
+except ImportError:
+    from mpv import MpvGlGetProcAddressFn as OpenGlCbGetProcAddrFn
+
 
 def get_process_address(_, name):
     address = GLX.glXGetProcAddress(name.decode("utf-8"))
     return ctypes.cast(address, ctypes.c_void_p).value
+
 
 class TwitzPlayer(Gtk.GLArea):
 
@@ -50,7 +57,7 @@ class TwitzPlayer(Gtk.GLArea):
         res = widget.get_active_id()
         self.play(res=res)
 
-    def set_stream(self, streamer_name:str):
+    def set_stream(self, streamer_name: str):
         self.stream = {
             "name": streamer_name,
             "url": twitch_streamer_uri % streamer_name,
@@ -63,7 +70,8 @@ class TwitzPlayer(Gtk.GLArea):
                 formats = meta.get('formats', [meta])
 
                 for f in formats:
-                    f_name = f["format_id"].replace("_"," ").replace("source","")
+                    f_name = f["format_id"].replace(
+                        "_", " ").replace("source", "")
                     self.stream["resolutions"][f_name] = f["url"]
 
                 self.window.set_live_info(
@@ -78,7 +86,6 @@ class TwitzPlayer(Gtk.GLArea):
                 "OFFLINE",
                 "The streamer you are looking for is currently offline"
             )
-
 
     def update_combo_res(self):
         self.window.combo_res.remove_all()
@@ -145,4 +152,3 @@ class TwitzPlayer(Gtk.GLArea):
             return True
 
         return False
-        
